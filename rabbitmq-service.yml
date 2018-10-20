@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    name: rabbitmq-sipm
+  name: rabbitmq-sipm
+  namespace: siplay
+spec:
+  ports:
+    - port: 5672
+  selector:
+    name: rabbitmq-sipm

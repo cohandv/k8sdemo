@@ -1,0 +1,133 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-sipm
+  namespace: siplay
+data:
+  app: |
+    {
+      "app": {
+        "name": "SIPlay API (k8s instance)",
+        "version": "1.1",
+        "debug": true
+      }
+    }
+  cache: |
+    {
+       "cache": {
+         "driver": "redis",
+         "redis": {
+           "host": "redis-sipm",
+           "port": 6379,
+           "options": {},
+           "feeditemexpire": 604800
+         }
+       }
+    }
+  database: |
+    {
+      "database": {
+        "driver": "mysql",
+        "logging": false,
+        "auto_migrate": true,
+        "sqlite": {
+          "path": "siplay.db",
+          "database": "siplay"
+        },
+        "mysql": {
+          "host": "mysql-sipm",
+          "port": 3306,
+          "user": "root",
+          "pass": "sipm",
+          "database": "siplay"
+        }
+      }
+    }
+  la: |
+    {
+      "la": {
+        "api": {
+          "url": "https://api.leagueathletics.com",
+          "user": "sipm",
+          "key": "$2a$10$gcc.ocmgqk0ObrSV3LYFD.d/I/SP/JyU.8SDB7pFLSB1bLgAE42C6"
+        }
+      }
+    }
+  logging: |
+    {
+      "logging": {
+        "filename": "./logs/log.txt",
+        "level": "debug",
+        "environment": "k8s",
+        "logstash": {
+          "enabled": false,
+          "host": "logstash.elk.siplay.io",
+          "port": 9899
+      }
+      }
+    }
+  rabbit: |
+    {
+       "mq": {
+          "rabbit": {
+             "prefix": "",
+             "postfix": "",
+             "host": "rabbitmq-sipm",
+             "user": "guest",
+             "pass": "guest",
+             "exchanges": {
+                "siplay": "siplay"
+             }
+          }
+       }
+    }
+  ssu: |
+    {
+      "ssu": {
+        "api": {
+          "clientId": "KAPR174)wc@r9geNkmFaos@vAb%fBIillqR6lUQZeHL*#p)VreOc3Z42CSyDDLDK",
+          "secret": "zjg1S0an(5@Fcc5QJx*mu2P=!N#wx0mxAlN7)q@j)6@fSlhVl$7yhfiO6GIpmpsJ",
+          "url": "https://partnerapi.siplay.com",
+          "version": 2
+        }
+      }
+    }
+  standalone: |
+    {
+      "standalone": {
+        "tokens": {
+          "newUser": {
+            "confirmBaseUrl": "http://middleware.k8s.siplay.xyz/token/",
+            "confirmRedirectBaseUrl": "siplay://createaccount/",
+            "confirmRedirectBaseUrlWeb": "https://team-creation.siplay.com/account/confirm/"
+          }
+        },
+        "emails": {
+          "inviteUsers": {
+            "baseUrl": "https://team-creation.siplay.com/invite/"
+          },
+          "existingUsers": {
+            "baseUrl": "https://mobile-app.siplay.com/?campaign=STANDALONE&autoredirect=mobile&linkText=your%20team%20site&url=https%3A%2F%2Fteams.siplay.com%2F"
+          },
+          "welcomeOwner": {
+            "delay": 900
+          },
+          "welcomeMember": {
+            "delay": 86400
+          }
+        },
+        "fromUser": {
+          "firstName": "SI",
+          "lastName": "Play"
+        },
+        "teams": {
+          "baseUrl": {
+            "web": "https://teams.siplay.com/"
+          },
+          "appStore": {
+            "ios": "https://siplay-static.s3.amazonaws.com/applaunch.html",
+            "android": "https://siplay-static.s3.amazonaws.com/applaunch.html"
+          }
+        }
+      }
+    }

@@ -1,0 +1,46 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: middleware
+  namespace: siplay
+spec:
+  replicas: 10
+  template:
+    metadata:
+      labels:
+        name: middleware
+    spec:
+      containers:
+      - name: middleware
+        image: 501217708765.dkr.ecr.us-east-1.amazonaws.com/siplay/middleware:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: "SIPLAY_ENV"
+          value: k8s
+        volumeMounts:
+        - mountPath: /var/lib/sipm/config/k8s
+          name: config
+      imagePullSecrets:
+      - name: awsecr-cred
+      volumes:
+        - name: config
+          configMap:
+            name: app-sipm
+            items:
+            - key: app
+              path: app.json
+            - key: cache
+              path: cache.json
+            - key: database
+              path: database.json
+            - key: la
+              path: la.json
+            - key: logging
+              path: logging.json
+            - key: rabbit
+              path: rabbit.json
+            - key: standalone
+              path: standalone.json
+            - key: ssu
+              path: ssu.json
